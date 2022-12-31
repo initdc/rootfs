@@ -1,5 +1,6 @@
 AllCops:
   TargetRubyVersion: 2.6
+  DefaultFormatter: simple
 
 Style/StringLiterals:
   Enabled: true

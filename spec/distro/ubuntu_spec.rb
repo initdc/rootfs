@@ -5,7 +5,7 @@ RSpec.describe RootFS do
     extend RootFS::Distro::Ubuntu
     include RootFS::Distro::Ubuntu
   end
-  
+
   u = MyClass.new
 
   it "does something useful" do
