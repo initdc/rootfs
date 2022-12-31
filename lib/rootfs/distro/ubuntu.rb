@@ -6,24 +6,25 @@ module RootFS
       # https://ubuntu.com/download
 
       # https://wiki.ubuntu.com/Releases
+      # http://releases.ubuntu.com/
       # https://cloud-images.ubuntu.com/
-      CODENAME_VERSION = {
-        lunar: "23.04",
-        kinetic: "22.10",
+      LTS = {
         jammy: "22.04",
         focal: "20.04",
-        bionic: "18.04",
+        bionic: "18.04"
+      }
+
+      ESM = {
         xenial: "16.04",
         trusty: "14.04"
       }
 
-      LTS = {
-        jammy: "22.04",
-        focal: "20.04",
-        bionic: "18.04",
-        xenial: "16.04",
-        trusty: "14.04"
+      DEV = {
+        lunar: "23.04",
+        kinetic: "22.10"
       }
+
+      CODENAME_VERSION = {}.merge(DEV, LTS, ESM)
 
       EDITION_RELEASE_URL = {
         Desktop: "http://cdimage.ubuntu.com/releases/",
