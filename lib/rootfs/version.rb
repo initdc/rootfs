@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-module Rootfs
+module RootFS
   VERSION = "0.0.1.pre"
 end

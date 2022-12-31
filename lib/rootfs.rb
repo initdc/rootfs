@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require_relative "rootfs/version"
+require_relative "rootfs/distro/ubuntu"
 
-module Rootfs
-  class Error < StandardError; end
-  # Your code goes here...
+module RootFS
+  extend RootFS::Distro::Ubuntu
 end

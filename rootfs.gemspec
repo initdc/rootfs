@@ -4,7 +4,7 @@ require_relative "lib/rootfs/version"
 
 Gem::Specification.new do |spec|
   spec.name = "rootfs"
-  spec.version = Rootfs::VERSION
+  spec.version = RootFS::VERSION
   spec.authors = ["initdc"]
   spec.email = ["initd@outlook.com"]
 
