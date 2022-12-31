@@ -9,5 +9,9 @@ end
 
 u = MyClass.new
 
-p u.is_lts?("20.04.5")
+p u.lts?("focal")
+p u.lts?("20.04.5")
+p u.lts?("20.04")
+p u.lts?("20")
+p u.lts?("20.10")
 p MyClass::CODENAME_VERSION
