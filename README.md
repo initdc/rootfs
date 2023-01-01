@@ -1,6 +1,6 @@
-# Rootfs
+# RootFS
 
-> Rootfs build workflow powered by ruby
+> RootFS build workflow powered by ruby
 
 Build workflow for rootfs images, Ubuntu openSUSE and more
 
