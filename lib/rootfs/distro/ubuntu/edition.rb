@@ -50,7 +50,7 @@ module RootFS
         puts err_msg if str.empty?
 
         EDITION.each do |edition|
-          return { edition: edition } if any.include?(edition)
+          return { edition: edition } if str.include?(edition)
         end
         puts err_msg
       end

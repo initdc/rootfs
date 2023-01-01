@@ -2,6 +2,7 @@
 
 require_relative "../../http"
 require_relative "../../data"
+require_relative "arch"
 
 module RootFS
   module Distro
@@ -45,6 +46,11 @@ module RootFS
         release = argv[1] || opts[:release] || "22.04"
         arch = argv[2] || opts[:arch] || "amd64"
         devkit = argv[3] || opts[:devkit]
+
+        hash = RootFS::Distro::Ubuntu.parse_arch(arch)
+        return unless hash
+
+        arch = hash[:arch]
 
         keywords = [edition, arch]
         ignores = []

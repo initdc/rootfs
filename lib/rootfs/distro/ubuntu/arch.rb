@@ -3,6 +3,8 @@
 module RootFS
   module Distro
     module Ubuntu
+      extend self
+
       ARCH = %w[
         amd64
         arm64
@@ -11,6 +13,20 @@ module RootFS
         riscv64
         s390x
       ].freeze
+
+      def parse_arch(any)
+        err_msg = "Valid Ubuntu arch: #{ARCH}"
+
+        puts err_msg unless any
+
+        str = any.to_s
+        puts err_msg if str.empty?
+
+        ARCH.each do |arch|
+          return { arch: arch } if str.include?(arch)
+        end
+        puts err_msg
+      end
     end
   end
 end
