@@ -3,6 +3,7 @@
 module RootFS
   module Distro
     module Ubuntu
+      extend self
       # https://ubuntu.com/download
       # https://wiki.ubuntu.com/Releases
 
@@ -38,6 +39,39 @@ module RootFS
       }.freeze
 
       CODENAME_VERSION = {}.merge(DEV, INTERIM, LTS, ESM).freeze
+
+      def parse_edition(any)
+        err_msg = "Valid Ubuntu edition: #{EDITION}"
+
+        puts err_msg unless any
+
+        str = any.to_s
+        puts err_msg if str.empty?
+
+        EDITION.each do |edition|
+          return { edition: edition } if any.include?(edition)
+        end
+        puts err_msg
+      end
+
+      def parse_release(any)
+        str = any.instance_of?(0.1.class) ? format("%.2f", any) : any.to_s
+        sym = str.to_sym
+        if CODENAME_VERSION.key?(sym)
+          version = CODENAME_VERSION[sym]
+          dev = DEV.key?(sym) ? true : false
+
+          { type: "codename", codename: sym, version: version, dev: dev }
+        elsif CODENAME_VERSION.value?(str)
+          codename = CODENAME_VERSION.key(str)
+          dev = DEV.value?(str) ? true : false
+
+          { type: "version", codename: codename, version: str, dev: dev }
+        else
+          keys_values = CODENAME_VERSION.keys + CODENAME_VERSION.values
+          puts "Valid Ubuntu release: #{keys_values}"
+        end
+      end
     end
   end
 end
