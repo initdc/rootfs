@@ -4,6 +4,8 @@ require "faraday"
 
 module RootFS
   module HTTP
+    extend self
+
     def get(url)
       resp = Faraday.get(url)
       code = resp.status

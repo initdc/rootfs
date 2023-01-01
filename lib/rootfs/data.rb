@@ -4,14 +4,28 @@ require_relative "distro/ubuntu"
 
 module RootFS
   module Data
-    def from_sha256sum(str, keywords)
+    extend self
+
+    def from_sha256sum(str, keywords, ignores = [])
       results = []
       lines = str.split("\n")
       lines.each do |line|
         arr = line.split(" ")
-        file = arr[1].delete_prefix("*")
+        file = arr[1]
+        next unless file
+
+        file = file.delete_prefix("*")
 
         all_matched = true
+
+        ignores.each do |ignore|
+          if file.include?(ignore)
+            all_matched = false
+            break
+          end
+        end
+        next unless all_matched
+
         keywords.each do |keyword|
           all_matched = false unless file.include?(keyword)
         end

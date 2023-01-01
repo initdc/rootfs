@@ -4,6 +4,7 @@ module RootFS
   module Distro
     module Ubuntu
       extend self
+
       # https://ubuntu.com/download
       # https://wiki.ubuntu.com/Releases
 

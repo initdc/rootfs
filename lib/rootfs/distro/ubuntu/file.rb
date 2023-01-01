@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
+require_relative "../../http"
+require_relative "../../data"
+
 module RootFS
   module Distro
     module Ubuntu
+      extend self
+
       # [   ] SHA256SUMS                                             2022-12-14 02:49  5.6K  Current Released Image
       # [   ] SHA256SUMS.gpg                                         2022-12-14 02:49  836   Current Released Image
 
@@ -34,14 +39,28 @@ module RootFS
       # [TXT]	jammy-base-amd64.manifest	2022-12-31 04:59	2.8K
       # [   ]	jammy-base-amd64.tar.gz	2022-12-31 04:59	28M
 
-      def files(*argv, **opts)
+      def files_of(*argv, daily: false, **opts)
+        edition = argv[0] || opts[:edition] || "base"
         # release: (version | codename)
-        release = argv[0] || opts[:release]
-        daily = opts[:daily]
-        pre = argv[1] || opts[:pre]
-        edition = argv[2] || opts[:edition]
-        arch = argv[3] || opts[:arch]
-        devkit = argv[4] || opts[:devkit]
+        release = argv[1] || opts[:release] || "22.04"
+        arch = argv[2] || opts[:arch] || "amd64"
+        devkit = argv[3] || opts[:devkit]
+
+        keywords = [edition, arch]
+        ignores = []
+
+        keywords.push(devkit) unless devkit.nil?
+
+        if %w[cloud minimal].include?(edition)
+          keywords.shift
+          keywords.push("-root")
+          ignores = %w[wsl lxd squashfs]
+        end
+
+        url = RootFS::Distro::Ubuntu.url_of(edition, release, daily)
+        resp = RootFS::HTTP.get(url)
+        body = resp.body
+        RootFS::Data.from_sha256sum(body, keywords, ignores)
       end
     end
   end

@@ -6,6 +6,7 @@ module RootFS
   module Distro
     module Ubuntu
       extend self
+
       # http://releases.ubuntu.com/
       # http://cdimage.ubuntu.com/
       # https://cloud-images.ubuntu.com/
