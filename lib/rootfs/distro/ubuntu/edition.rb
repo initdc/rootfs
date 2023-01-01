@@ -4,10 +4,27 @@ module RootFS
   module Distro
     module Ubuntu
       # https://ubuntu.com/download
-
       # https://wiki.ubuntu.com/Releases
+
       # http://releases.ubuntu.com/
+      # http://cdimage.ubuntu.com/
       # https://cloud-images.ubuntu.com/
+
+      EDITION = %w[
+        desktop
+        server
+        base
+        cloud
+        minimal
+      ].freeze
+
+      DEV = {
+        lunar: "23.04"
+      }.freeze
+
+      INTERIM = {
+        kinetic: "22.10"
+      }.freeze
 
       LTS = {
         jammy: "22.04",
@@ -20,21 +37,7 @@ module RootFS
         trusty: "14.04"
       }.freeze
 
-      DEV = {
-        lunar: "23.04",
-        kinetic: "22.10"
-      }.freeze
-
-      CODENAME_VERSION = {}.merge(DEV, LTS, ESM).freeze
-
-      def lts?(any)
-        str = any.to_s
-        LTS.each do |code, ver|
-          return true if str == code.to_s
-          return true if str.start_with?(ver)
-        end
-        false
-      end
+      CODENAME_VERSION = {}.merge(DEV, INTERIM, LTS, ESM).freeze
     end
   end
 end
