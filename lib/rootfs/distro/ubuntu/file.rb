@@ -2,7 +2,6 @@
 
 require_relative "../../http"
 require_relative "../../data"
-require_relative "arch"
 
 module RootFS
   module Distro
@@ -47,11 +46,6 @@ module RootFS
         arch = argv[2] || opts[:arch] || "amd64"
         devkit = argv[3] || opts[:devkit]
 
-        hash = RootFS::Distro::Ubuntu.parse_arch(arch)
-        return unless hash
-
-        arch = hash[:arch]
-
         keywords = [edition, arch]
         ignores = []
 
@@ -63,10 +57,13 @@ module RootFS
           ignores = %w[wsl lxd squashfs]
         end
 
-        url = RootFS::Distro::Ubuntu.url_of(edition, release, daily)
+        url = RootFS::Distro::Ubuntu.url_of(edition, release, daily, arch: arch)
+        return if url.nil?
+
         resp = RootFS::HTTP.get(url)
         body = resp.body
-        RootFS::Data.from_sha256sum(body, keywords, ignores)
+        files = RootFS::Data.from_sha256sum(body, keywords, ignores)
+        { sha256sum: url, files: files }
       end
     end
   end

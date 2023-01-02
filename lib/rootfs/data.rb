@@ -27,7 +27,10 @@ module RootFS
         next unless all_matched
 
         keywords.each do |keyword|
-          all_matched = false unless file.include?(keyword)
+          unless file.include?(keyword)
+            all_matched = false
+            break
+          end
         end
         results.push(file) if all_matched
       end

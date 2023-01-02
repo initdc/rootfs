@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "edition"
+require_relative "arch"
 
 module RootFS
   module Distro
@@ -13,12 +14,24 @@ module RootFS
 
       EDITION_URL = {
         desktop: {
-          release: "http://cdimage.ubuntu.com/releases/{version}/release/SHA256SUMS",
-          daily: "http://cdimage.ubuntu.com/{codename}/daily-preinstalled/current/SHA256SUMS"
+          release: {
+            amd64: "http://releases.ubuntu.com/{version}/SHA256SUMS",
+            others: "http://cdimage.ubuntu.com/releases/{version}/release/SHA256SUMS"
+          },
+          daily: {
+            amd64: "http://cdimage.ubuntu.com/{codename}/daily-live/current/SHA256SUMS",
+            others: "http://cdimage.ubuntu.com/{codename}/daily-preinstalled/current/SHA256SUMS"
+          }
         },
         server: {
-          release: "http://cdimage.ubuntu.com/releases/{version}/release/SHA256SUMS",
-          daily: "http://cdimage.ubuntu.com/ubuntu-server/{codename}/daily-preinstalled/current/SHA256SUMS"
+          release: {
+            amd64: "http://releases.ubuntu.com/{version}/SHA256SUMS",
+            others: "http://cdimage.ubuntu.com/releases/{version}/release/SHA256SUMS"
+          },
+          daily: {
+            amd64: "http://cdimage.ubuntu.com/ubuntu-server/{codename}/daily-live/current/SHA256SUMS",
+            others: "http://cdimage.ubuntu.com/ubuntu-server/{codename}/daily-preinstalled/current/SHA256SUMS"
+          }
         },
         base: {
           release: "http://cdimage.ubuntu.com/ubuntu-base/releases/{version}/release/SHA256SUMS",
@@ -34,7 +47,7 @@ module RootFS
         }
       }.freeze
 
-      def url_of(edi, rel, daily = false)
+      def url_of(edi, rel, daily = false, arch: "amd64")
         hash = RootFS::Distro::Ubuntu.parse_edition(edi)
         return unless hash
 
@@ -49,8 +62,22 @@ module RootFS
         dev = hash[:dev]
         daily ||= type == "codename"
 
-        url_tmpl = !daily ? EDITION_URL[edition.to_sym][:release] : EDITION_URL[edition.to_sym][:daily]
-        top_dir = url_tmpl.start_with?("http://cdimage.ubuntu.com") && dev && daily
+        hash = RootFS::Distro::Ubuntu.parse_arch(arch)
+        return unless hash
+
+        arch = hash[:arch]
+
+        url_tmpl = if %w[desktop server].include?(edition)
+                     if arch == "amd64"
+                       !daily ? EDITION_URL[edition.to_sym][:release][:amd64] : EDITION_URL[edition.to_sym][:daily][:amd64]
+                     else
+                       !daily ? EDITION_URL[edition.to_sym][:release][:others] : EDITION_URL[edition.to_sym][:daily][:others]
+                     end
+                   else
+                     !daily ? EDITION_URL[edition.to_sym][:release] : EDITION_URL[edition.to_sym][:daily]
+                   end
+
+        top_dir = url_tmpl.include?("cdimage.ubuntu.com") && dev && daily
         codename = "" if top_dir
 
         url_tmpl.gsub("{version}", version).gsub("{codename}", codename.to_s)
