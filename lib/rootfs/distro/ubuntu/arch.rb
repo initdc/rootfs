@@ -22,9 +22,8 @@ module RootFS
         str = any.to_s
         puts err_msg if str.empty?
 
-        ARCH.each do |arch|
-          return { arch: arch } if str.include?(arch)
-        end
+        return { arch: str } if ARCH.include?(str)
+
         puts err_msg
       end
     end

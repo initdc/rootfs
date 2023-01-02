@@ -49,9 +49,8 @@ module RootFS
         str = any.to_s
         puts err_msg if str.empty?
 
-        EDITION.each do |edition|
-          return { edition: edition } if str.include?(edition)
-        end
+        return { edition: str } if EDITION.include?(str)
+
         puts err_msg
       end
 
