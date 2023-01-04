@@ -36,5 +36,28 @@ module RootFS
       end
       results
     end
+
+    def from_gentoo_txt(str, keywords)
+      results = []
+      lines = str.split("\n")
+      lines.each do |line|
+        next if line.start_with?("#")
+
+        arr = line.split(" ")
+        file = arr[0]
+        next unless file
+
+        all_matched = true
+
+        keywords.each do |keyword|
+          unless file.include?(keyword)
+            all_matched = false
+            break
+          end
+        end
+        results.push(file) if all_matched
+      end
+      results
+    end
   end
 end
