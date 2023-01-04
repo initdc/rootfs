@@ -11,6 +11,7 @@ u = MyClass.new
 
 p u.files_of
 p u.files_of("desktop", 20.04)
+p u.files_of("desktop", 22.04, daily: true)
 p u.files_of("desktop", 23.04)
 p u.files_of("desktop", "lunar")
 p u.files_of("server", 20.04)

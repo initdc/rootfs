@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../http"
-require_relative "../../data"
+require_relative "../ubuntu"
 
 module RootFS
   module Distro

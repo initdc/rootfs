@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "edition"
-require_relative "arch"
+require_relative "../ubuntu"
 
 module RootFS
   module Distro

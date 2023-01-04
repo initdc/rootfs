@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "../../parse"
+
 module RootFS
   module Distro
     module Ubuntu
@@ -42,16 +44,7 @@ module RootFS
       CODENAME_VERSION = {}.merge(DEV, INTERIM, LTS, ESM).freeze
 
       def parse_edition(any)
-        err_msg = "Valid Ubuntu edition: #{EDITION}"
-
-        puts err_msg unless any
-
-        str = any.to_s
-        puts err_msg if str.empty?
-
-        return { edition: str } if EDITION.include?(str)
-
-        puts err_msg
+        RootFS::Parse._str_in_arr(any, "Ubuntu", "edition", EDITION)
       end
 
       def parse_release(any)

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "../../parse"
+
 module RootFS
   module Distro
     module Ubuntu
@@ -15,16 +17,7 @@ module RootFS
       ].freeze
 
       def parse_arch(any)
-        err_msg = "Valid Ubuntu arch: #{ARCH}"
-
-        puts err_msg unless any
-
-        str = any.to_s
-        puts err_msg if str.empty?
-
-        return { arch: str } if ARCH.include?(str)
-
-        puts err_msg
+        RootFS::Parse._str_in_arr(any, "Ubuntu", "arch", ARCH)
       end
     end
   end
