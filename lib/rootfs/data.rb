@@ -59,5 +59,31 @@ module RootFS
       end
       results
     end
+
+    def from_alpine_yaml(str)
+      results = {}
+      flavors = str.split("-\n")
+      flavors.each do |flavor|
+        next unless flavor.include?("flavor: alpine-minirootfs")
+
+        lines = flavor.split("\n")
+        lines.each do |line|
+          line = line.delete_prefix("  ")
+          arr = line.split(":")
+          key = arr[0]
+          value = arr[1]
+          value = value.delete_prefix(" ") if value
+
+          results[:version] = value if key == "version"
+          results[:file] = value if key == "file"
+          if key == "sha256"
+            results[:sha256] = value
+            break
+          end
+        end
+        break
+      end
+      results
+    end
   end
 end
