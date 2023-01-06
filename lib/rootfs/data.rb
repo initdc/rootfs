@@ -60,6 +60,24 @@ module RootFS
       results
     end
 
+    def from_fedora_txt(str, keywords)
+      results = []
+      lines = str.split("\n")
+      lines.each do |line|
+        file = line.delete_prefix(".")
+
+        all_matched = true
+        keywords.each do |keyword|
+          unless file.include?(keyword)
+            all_matched = false
+            break
+          end
+        end
+        results.push(file) if all_matched
+      end
+      results
+    end
+
     def from_alpine_yaml(str)
       results = {}
       flavors = str.split("-\n")
