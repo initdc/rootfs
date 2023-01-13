@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "json"
 require_relative "distro/ubuntu"
 
 module RootFS
@@ -100,6 +101,27 @@ module RootFS
           end
         end
         break
+      end
+      results
+    end
+
+    def from_suse_json(str, keywords)
+      json = JSON.parse(str)
+      return if json.empty?
+
+      results = []
+      json.each do |item|
+        sha256 = item["name"]
+        next unless sha256
+
+        all_matched = true
+        keywords.each do |keyword|
+          unless sha256.include?(keyword)
+            all_matched = false
+            break
+          end
+        end
+        results.push(sha256) if all_matched
       end
       results
     end
