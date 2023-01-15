@@ -42,6 +42,29 @@ module RootFS
         end
         list
       end
+
+      def can_install(pkgs)
+        ignores = []
+        Libexec.each_line("apt-get install #{pkgs.join(" ")} 2>&1") do |line|
+          err_pre = "E: Unable to locate package "
+          if line.include?(err_pre)
+            pkg = line.chomp.delete_prefix(err_pre)
+            ignores.push(pkg)
+          end
+        end
+        return pkgs if ignores.empty?
+
+        pkgs -= ignores
+        can_install(pkgs)
+      end
+
+      def can_from_file(file)
+        pkgs = []
+        IO.readlines(file).each do |line|
+          pkgs.push(line.chomp)
+        end
+        can_install(pkgs)
+      end
     end
   end
 end

@@ -40,4 +40,7 @@ server = live_server_pkgs - base_pkg
 desktop = live_desktop_pkgs - base_pkg
 
 # puts server
-puts desktop
+# puts desktop
+
+puts u.can_install(desktop)
+# puts u.can_from_file("install.txt")
