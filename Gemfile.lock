@@ -7,6 +7,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
+    cr-exec (0.1.0)
     diff-lcs (1.5.0)
     faraday (2.7.2)
       faraday-net_http (>= 2.0, < 3.1)
@@ -53,6 +54,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  cr-exec (~> 0.1)
   faraday (~> 2.7)
   rake (~> 13.0)
   rootfs!
